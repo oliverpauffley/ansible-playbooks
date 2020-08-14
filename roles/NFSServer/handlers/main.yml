@@ -1,0 +1,6 @@
+---
+# handlers file for NFSServer
+- name: run nfs
+  systemd:
+    state: started
+    name: nfs-server.service

@@ -1,0 +1,36 @@
+---
+# tasks file for NFSServer
+- name: Check for NFS-common
+  become: true
+  apt:
+    name: nfs-common
+    state: present
+
+- name: Check for NFS-server
+  become: true
+  apt:
+    name: nfs-kernel-server
+    state: present
+
+- name: Check for NTFS-3g
+  become: true
+  apt:
+    name: ntfs-3g
+    state: present
+
+- name: Create mount directory
+  file:
+    path: "{{mountPath}}"
+    state: directory
+    mode: '0755'
+
+
+- name: Mount disks
+  become: true
+  mount:
+    path: "{{mountPath}}"
+    src: UUID="{{ hostvars[inventory_hostname].diskUUID}}"
+    fstype: ntfs
+    opts: nofail
+    state: mounted
+  notify: run nfs
